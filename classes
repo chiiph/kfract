@@ -1,0 +1,13 @@
+point
+|
+line__________
+|             |
+triangle    square
+|*            |*
+|   __________|
+cube
+
+x3dFile
+|
+|*
+x3dReader
