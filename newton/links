@@ -1,0 +1,18 @@
+newton fractal:
+http://facstaff.unca.edu/mcmcclur/mathematicaGraphics/Newton/index.html
+http://www.chiark.greenend.org.uk/~sgtatham/newton/
+http://en.wikipedia.org/wiki/Newton_fractal
+
+complex numbers:
+http://www.lispworks.com/documentation/HyperSpec/Body/a_comple.htm
+
+mandelbulb formula:
+http://www.fractalforums.com/3d-fractal-generation/true-3d-mandlebrot-type-fractal/msg4109/#msg4109
+
+*******************
+En el ejemplo de Newton's Fractal es 2D, por lo que usa numeros complejos, pero en 3D hay que usar numeros
+hipercomplejos:
+
+http://www.skytopia.com/project/fractal/2mandelbulb.html#formula
+
+http://www.bugman123.com/Hypercomplex/index.html
