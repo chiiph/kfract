@@ -1,7 +1,3 @@
-(defpackage Vector3f)
-
-(in-package :Vector3f)
-
 (defclass Vector3f ()
   ((v1
      :initarg :v1
