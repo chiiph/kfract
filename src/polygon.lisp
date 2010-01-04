@@ -12,7 +12,19 @@
      :initform (make-instance 'Vector3f)
      :accessor emitivity)))
 
-;:::: TODO: descifrar ::::;
+;:::: Como getv/setv generics estan definidos en Vector3f, no hay que redefinirlos
+;:::: para usarlos en Polygon. TODO: Ver desde el pto de vista de la OOP como queda
+;:::: mejor definir estos generics, tal vez hacer un package que sea 3DObjs y ahi
+;:::: definir getv/setv generics, y que despues vector3f y los polys esten dentro 
+;:::: de ese package
+
+;(defgeneric getv (poly i)
+;            (:documentation "Returns the vertex i from vec"))
+
+;(defgeneric setv (poly i val)
+;            (:documentation "Sets val to the vertex i from vec"))
+
+;:::: TODO: descifrar e implementar ::::;
 (defgeneric bound ()
 	    (:documentation "..."))
 

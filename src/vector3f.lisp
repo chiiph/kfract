@@ -1,16 +1,18 @@
 (defclass Vector3f ()
-  ((v1
-     :initarg :v1
-     :initform 0.0
-     :accessor v1)
-   (v2
-     :initarg :v2
-     :initform 0.0
-     :accessor v2)
-   (v3
-     :initarg :v3
-     :initform 0.0
-     :accessor v3)))
+  ((verts
+     :initarg :verts
+     :initform #(0.0 0.0 0.0)
+     :accessor verts)
+   ))
+
+(defgeneric make-vector3f (vec)
+	    (:documentation "Creates an instance of Vector3f class with vec as its verts"))
+
+(defgeneric getv (vec i)
+	    (:documentation "Returns the vertex i from vec"))
+
+(defgeneric setv (vec i val)
+	    (:documentation "Sets val to the vertex i from vec"))
 
 (defgeneric dot (vec1 vec2)
 	    (:documentation "Returns the dot product between vec1 and vec2"))
@@ -45,76 +47,99 @@
 
 ;:::: IMPLEMENTATION ::::;
 
+;:::: CONSTRUCTOR    ::::;
+
+(defmethod make-vector3f (vec)
+  (make-instance 'Vector3f :verts (make-array 3 :initial-contents vec)))
+
+;:::: GET/SET FUNCS  ::::;
+
+(defmethod getv ((vec Vector3f) i)
+  (elt (verts vec) i))
+
+(defmethod setv ((vec Vector3f) i val)
+  (setf (elt (verts vec) i) val))
+
+;:::: THE REST ::::;
+
 (defmethod dot ((vec1 Vector3f) (vec2 Vector3f))
-  (+ (* (v1 vec1) (v1 vec2)) (* (v2 vec1) (v2 vec2)) (* (v3 vec1) (v3 vec2))))
+  (let ((sum 0.0))
+    (dotimes (i 3)
+      (incf sum (* (getv vec1 i) (getv vec2 i))))
+    (return-from dot sum)))
 
 (defmethod cross ((vec1 Vector3f) (vec2 Vector3f))
-  (let ((p1 (- (* (v2 vec1) (v3 vec2)) (* (v3 vec1) (v2 vec2))))
-	(p2 (- (* (v3 vec1) (v1 vec2)) (* (v1 vec1) (v3 vec2))))
-	(p3 (- (* (v1 vec1) (v2 vec2)) (* (v2 vec1) (v1 vec2)))))
-    (make-instance 'Vector3f :v1 p1 :v2 p2 :v3 p3)))
+  (let ((p1 (- (* (getv vec1 1) (getv vec2 2)) (* (getv vec1 2) (getv vec2 1))))
+	(p2 (- (* (getv vec1 2) (getv vec2 0)) (* (getv vec1 0) (getv vec2 2))))
+	(p3 (- (* (getv vec1 0) (getv vec2 1)) (* (getv vec1 1) (getv vec2 0)))))
+    (make-instance 'Vector3f :verts (make-array 3 :initial-contents (list p1 p2 p3)))))
 
 (defmethod sub ((vec1 Vector3f) (vec2 Vector3f))
-  (let ((p1 (- (v1 vec1) (v1 vec2)))
-	(p2 (- (v2 vec1) (v2 vec2)))
-	(p3 (- (v3 vec1) (v3 vec2))))
-    (make-instance 'Vector3f :v1 p1 :v2 p2 :v3 p3)))
+  (setf ar (make-array 3))
+  (dotimes (i 3)
+    (setf (elt ar i) (- (getv vec1 i) (getv vec2 i))))
+  (make-instance 'Vector3f :verts ar))
 
 (defmethod plus ((vec1 Vector3f) (vec2 Vector3f))
-  (let ((p1 (+ (v1 vec1) (v1 vec2)))
-	(p2 (+ (v2 vec1) (v2 vec2)))
-	(p3 (+ (v3 vec1) (v3 vec2))))
-    (make-instance 'Vector3f :v1 p1 :v2 p2 :v3 p3)))
+  (setf ar (make-array 3))
+  (dotimes (i 3)
+    (setf (elt ar i) (+ (getv vec1 i) (getv vec2 i))))
+  (make-instance 'Vector3f :verts ar))
 
 (defmethod mul ((vec1 Vector3f) (vec2 Vector3f))
-  (let ((p1 (* (v1 vec1) (v1 vec2)))
-	(p2 (* (v2 vec1) (v2 vec2)))
-	(p3 (* (v3 vec1) (v3 vec2))))
-    (make-instance 'Vector3f :v1 p1 :v2 p2 :v3 p3)))
+  (setf ar (make-array 3))
+  (dotimes (i 3)
+    (setf (elt ar i) (* (getv vec1 i) (getv vec2 i))))
+  (make-instance 'Vector3f :verts ar))
 
 (defmethod mul ((vec1 Vector3f) f)
-  (let ((p1 (* (v1 vec1) f))
-	(p2 (* (v2 vec1) f))
-	(p3 (* (v3 vec1) f)))
-    (make-instance 'Vector3f :v1 p1 :v2 p2 :v3 p3)))
+  (setf ar (make-array 3))
+  (dotimes (i 3)
+    (setf (elt ar i) (* (getv vec1 i) f)))
+  (make-instance 'Vector3f :verts ar))
 
 (defmethod div ((vec1 Vector3f) f)
-  (if (or (not (numberp f)) (= f 0.0))
-    (error "Dividing by ZERO or by not a number"))
-  (let ((p1 (/ (v1 vec1) f))
-	(p2 (/ (v2 vec1) f))
-	(p3 (/ (v3 vec1) f)))
-    (make-instance 'Vector3f :v1 p1 :v2 p2 :v3 p3)))
+  (setf ar (make-array 3))
+  (dotimes (i 3)
+    (setf (elt ar i) (/ (getv vec1 i) f)))
+  (make-instance 'Vector3f :verts ar))
 
 (defmethod unitize ((vec Vector3f))
-  (let* ((l (sqrt (+ (expt (v1 vec) 2) (expt (v2 vec)) (expt (v3 vec)))))
+  (let* ((l    (sqrt (+ (expt (getv vec 0) 2) (expt (getv vec 1) 2) (expt (getv vec 2) 2))))
 	 (oneL (if (zerop l) 0.0 (/ 1.0 l))))
-    (make-instance 'Vector3f 
-		   :v1 (* (v1 vec) oneL) 
-		   :v2 (* (v2 vec) oneL)
-		   :v3 (* (v3 vec) oneL))))
+    (make-instance 'Vector3f :verts (make-array 3 :initial-contents (list (* (getv vec 0) oneL) (* (getv vec 1) oneL) (* (getv vec 2) oneL))))))
 
 (defmethod isZero ((vec Vector3f))
-  (and (zerop (v1 vec)) (zerop (v2 vec)) (zerop (v3 vec))))
+  (and (zerop (getv vec 0)) (zerop (getv vec 1)) (zerop (getv vec 2))))
 
-;:::: TODO: encontrar alguna forma razonable de implementar esto ::::;
-;(defmethod clamp ((vec Vector3f) (min Vector3f) (max Vector3f))
-;  (do ((v '((v1 vec) (v2 vec) (v3 vec)) (rest v))
-;       (mi '((v1 min) (v2 min) (v3 min)) (rest mi))
-;       (ma '((v1 max) (v2 max) (v3 max)) (rest ma)))
-;      ((or (null v) (null mi) (null ma)) nil)
-;    (if (< v mi) (setf v mi))
-;    (if (> v ma) (setf v ma))))
+(defmethod clamp ((vec Vector3f) (min Vector3f) (max Vector3f))
+  (loop
+    for v  across (verts vec)
+    for mi across (verts min)
+    for ma across (verts max)
+    for i from 0 to 2 collecting i
+    if (< v mi) do (setv vec i mi)
+    if (> v ma) do (setv vec i ma)))
 
 (defmethod neg ((vec Vector3f))
-  (make-instance 'Vector3f :v1 (- (v1 vec)) :v2 (- (v2 vec)) :v3 (- (v3 vec))))
+  (make-instance 'Vector3f :verts 
+		 (make-array 3 :initial-contents (list
+						   (- (getv vec 0))
+						   (- (getv vec 1))
+						   (- (getv vec 2))))))
 
 ;:::: TESTS ::::;
 
-;(setf test1 (make-instance 'Vector3f :v1 2 :v2 3 :v3 4))
-;(setf test2 (make-instance 'Vector3f :v1 1 :v2 2 :v3 3))
+;(setf test1 (make-instance 'Vector3f :verts #(1.0 2.0 3.0)))
+;(setf test2 (make-instance 'Vector3f :verts #(0.5 5.0 6.0)))
+;(setf max (make-instance 'Vector3f :verts #(3.2 5.0 4.9)))
 
 ;(format t "The dot product is ~S" (dot test1 test2))
 ;(describe (cross test1 test2))
+;(print (elt (verts (cross test1 test2)))
+;(describe (unitize test1))
+;(clamp test2 test1 max)
+;(describe test2)
 ;(describe (div test1 "a"))
 ;(describe (mul test1 2))
+;(describe (neg test2))
