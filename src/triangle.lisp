@@ -36,7 +36,7 @@
   (unitize (sub (getv tri 2) (getv tri 1))))
 
 (defmethod normal ((tri Triangle))
-  (unitize (cross (tangent tri (sub (getv tri 3) (getv tri 2))))))
+  (unitize (cross (tangent tri) (sub (getv tri 3) (getv tri 2)))))
 
 (defmethod area ((tri Triangle))
   (let* ((res1 (sub (getv tri 2) (getv tri 1)))
@@ -73,7 +73,7 @@
     (make-instance 'Vector3f 
 		   :verts (make-array 3 :initial-element point))))
 
-(setf tri (make-triangle (list 1.0 2.0 3.0) (list 4.0 5.0 6.0) (list 7.0 8.0 9.0)))
+;(setf tri (make-triangle (list 1.0 2.0 3.0) (list 4.0 5.0 6.0) (list 7.0 8.0 9.0)))
 
 ;(setf vec1 (make-array 3 :initial-contents (list 1.0 2.0 3.0)))
 ;(setf vec2 (make-array 3 :initial-contents (list 4.0 5.0 6.0)))
@@ -84,6 +84,6 @@
 ;                                           (make-instance 'Vector3f :verts vec2)
 ;                                           (make-instance 'Vector3f :verts vec3)))))
 
-(describe (getv tri 2))
+;(describe (getv tri 2))
 ;(describe vec1)
 ;(describe (samplePoint t))
