@@ -59,7 +59,7 @@
       (let* ((qvec (cross tvec edge1))
 	     (v    (* (dot rayDirection qvec) inv_det)))
 	(if (or (< v 0.0) (> (+ u v) 1.0))
-	  (return-from intersects -1.0))
+	  (return-from intersects -1.0)) ; Returns -1.0 if it doesn't intersect
 	(* (dot edge2 qvec) inv_det))))) ; Returns hitDistance
 
 (defmethod samplePoint ((tri Triangle))

@@ -1,16 +1,18 @@
 (load "vector3f.lisp")
 
-(defconstant tolerance (/ 1.0 1024.0))
+(defconstant tolerance (/ 1.0d0 1024.0d0))
 
 (defclass Polygon ()
   ((reflectivity
      :initarg :ref
-     :initform (make-instance 'Vector3f)
+     :initform (make-vector3f '(0.0 0.0 0.0))
      :accessor reflectivity)
    (emitivity
      :initarg :emit
-     :initform (make-instance 'Vector3f)
+     :initform (make-vector3f '(0.0 0.0 0.0))
      :accessor emitivity)))
+
+;:::: TODO: Clase Material, para datos como color, diffuse, ior, etc
 
 ;:::: Como getv/setv generics estan definidos en Vector3f, no hay que redefinirlos
 ;:::: para usarlos en Polygon. TODO: Ver desde el pto de vista de la OOP como queda
