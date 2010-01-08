@@ -47,7 +47,7 @@
 				    distance2
 				    1.0))
 		       1.0))
-	 (res (* (emitivity tri) solidAngle)))
+	 (res (mul (emitivity tri) solidAngle)))
     (if (> cosArea 0.0)
       (make-vector3f '(res res res))
       (make-vector3f '(0.0 0.0 0.0)))))
@@ -66,6 +66,26 @@
 
 ; Returns outDirection color
 ; Call this with (multiple-value-setq (outDirection color) (nextDirection))
+; Check for isZero when calling
 (defmethod nextDirection ((surf         SurfacePoint)
 			  (inDirection  Vector3f))
-  )
+  (let* ((reflect (reflectivity (triangle surf)))
+	 (vec1 (make-vector3f '(1.0 1.0 1.0)))
+	 (reflectivityMean (/ (dot reflect vec1) 3.0)))
+    (if (< (random 1.0) reflectivityMean)
+      (let* ((color (div reflect reflectivityMean))
+	     (outDirection (make-vector3f '(0.0 0.0 0.0)))
+	     (_2pr1 (* pi 2.0 (random 1.0)))
+	     (sr2 (sqrt (random 1.0)))
+	     (x (* (cos _2pr1) sr2))
+	     (y (* (sin _2pr1) sr2))
+	     (z (sqrt (- 1.0 (* sr2 sr2))))
+	     (norm (normal (triangle surf)))
+	     (normal (if (>= (dot norm inDirection) 0.0)
+		       norm
+		       (neg norm)))
+	     (tangent (tangent (triangle surf)))
+	     (outDirection (plus (mul tangent x)
+				 (plus (mul (cross normal tangent) y)
+				       (mul normal z)))))
+	(values outDirection color)))))

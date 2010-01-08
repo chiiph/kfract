@@ -33,26 +33,26 @@
 ;:::: THE REST ::::;
 
 (defmethod tangent ((tri Triangle))
-  (unitize (sub (getv tri 2) (getv tri 1))))
+  (unitize (sub (getv tri 1) (getv tri 0))))
 
 (defmethod normal ((tri Triangle))
-  (unitize (cross (tangent tri) (sub (getv tri 3) (getv tri 2)))))
+  (unitize (cross (tangent tri) (sub (getv tri 2) (getv tri 1)))))
 
 (defmethod area ((tri Triangle))
-  (let* ((res1 (sub (getv tri 2) (getv tri 1)))
-	 (res2 (sub (getv tri 3) (getv tri 2)))
+  (let* ((res1 (sub (getv tri 1) (getv tri 0)))
+	 (res2 (sub (getv tri 2) (getv tri 1)))
 	 (pa2  (cross res1 res2)))
     (* (sqrt (dot pa2 pa2)) 0.5)))
 
 (defmethod intersects ((tri Triangle) (rayOrigin Vector3f) (rayDirection Vector3f))
-  (let* ((edge1 (sub (getv tri 2) (getv tri 1)))
-	 (edge2 (sub (getv tri 3) (getv tri 1)))
+  (let* ((edge1 (sub (getv tri 1) (getv tri 0)))
+	 (edge2 (sub (getv tri 2) (getv tri 0)))
 	 (pvec  (cross rayDirection edge2))
 	 (det   (dot edge1 pvec)))
     (if (and (> det (- EPSILON)) (< det EPSILON))
       (return-from intersects -1.0))
     (let* ((inv_det (/ 1.0 det))
-	   (tvec    (sub rayOrigin (getv tri 1)))
+	   (tvec    (sub rayOrigin (getv tri 0)))
 	   (u       (* (dot tvec pvec) inv_det)))
       (if (or (< u 0.0) (> u 1.0))
 	(return-from intersects -1.0))
@@ -66,24 +66,7 @@
   (let* ((sqr1 (sqrt (random 1.0)))
 	 (r2   (random 1.0))
 	 (a    (- 1.0 sqr1))
-	 (b    (* (- 1.0 r2) sqr1))
-	 (point (plus (mul (sub (getv tri 2) (getv tri 1)) a)
-		      (mul (sub (getv tri 3) (getv tri 1)) b)
-		      (getv tri 1))))
-    (make-instance 'Vector3f 
-		   :verts (make-array 3 :initial-element point))))
-
-;(setf tri (make-triangle (list 1.0 2.0 3.0) (list 4.0 5.0 6.0) (list 7.0 8.0 9.0)))
-
-;(setf vec1 (make-array 3 :initial-contents (list 1.0 2.0 3.0)))
-;(setf vec2 (make-array 3 :initial-contents (list 4.0 5.0 6.0)))
-;(setf vec3 (make-array 3 :initial-contents (list 7.0 8.0 9.0)))
-;(setf tri (make-instance 'Triangle :verts 
-;                         (make-array 3 :initial-contents 
-;                                     (list (make-instance 'Vector3f :verts vec1)
-;                                           (make-instance 'Vector3f :verts vec2)
-;                                           (make-instance 'Vector3f :verts vec3)))))
-
-;(describe (getv tri 2))
-;(describe vec1)
-;(describe (samplePoint t))
+	 (b    (* (- 1.0 r2) sqr1)))
+    (plus (mul (sub (getv tri 1) (getv tri 0)) a)
+	  (plus (mul (sub (getv tri 2) (getv tri 0)) b)
+		(getv tri 0)))))
