@@ -17,6 +17,12 @@ class RayTracer(object):
         if hit_ref:
             surface_point = SurfacePoint(hit_ref, hit_position)
             local_emission = ZERO if last_hit else surface_point.get_emission(ray_origin, -ray_direction, False)
+#            if not local_emission.is_zero():
+#                    print "======================"
+#                    print "LOCAL_EMISSION != ZERO"
+#                ray_origin.echovec()
+#                (-ray_direction).echovec()
+#                local_emission.echovec()
             illumination = self.sample_emitters(ray_direction, surface_point)
             next_direction, color = surface_point.get_next_direction(-ray_direction)
             reflection = ZERO if next_direction.is_zero() else color * self.get_radiance(surface_point.position, next_direction, surface_point.triangle_ref)
@@ -30,6 +36,21 @@ class RayTracer(object):
             emit_direction = (emitter_position - surface_point.position).unitize()
             hit_ref, p = self.scene_ref.get_intersection(surface_point.position, emit_direction, surface_point.triangle_ref)
             emission_in = SurfacePoint(emitter_ref, emitter_position).get_emission(surface_point.position, -emit_direction, True) if not hit_ref or emitter_ref == hit_ref else ZERO
-            return surface_point.get_reflection(emit_direction, emission_in * self.scene_ref.emitters_count(), -ray_direction)
+
+	    print "***************"
+	    surface_point.triangle_ref.vertexs[0].echovec()
+	    surface_point.triangle_ref.vertexs[1].echovec()
+	    surface_point.triangle_ref.vertexs[0].echovec()
+	    surface_point.triangle_ref.reflectivity.echovec()
+	    surface_point.triangle_ref.emitivity.echovec()
+
+	    surface_point.position.echovec()
+	    print "ACA ESTAMOS"
+	    emit_direction.echovec()
+	    (emission_in * self.scene_ref.emitters_count()).echovec()
+	    (-ray_direction).echovec()
+	    s = surface_point.get_reflection(emit_direction, emission_in * self.scene_ref.emitters_count(), -ray_direction)
+	    s.echovec()
+            return s
         else:
             return ZERO

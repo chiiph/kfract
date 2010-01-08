@@ -1,6 +1,6 @@
 (load "polygon.lisp")
 
-(defconstant EPSILON 0.000001)
+(defconstant EPSILON 0.000001d0)
 
 (defclass Triangle (Polygon)
   ((verts
@@ -42,7 +42,7 @@
   (let* ((res1 (sub (getv tri 1) (getv tri 0)))
 	 (res2 (sub (getv tri 2) (getv tri 1)))
 	 (pa2  (cross res1 res2)))
-    (* (sqrt (dot pa2 pa2)) 0.5)))
+    (* (sqrt (dot pa2 pa2)) 0.5d0)))
 
 (defmethod intersects ((tri Triangle) (rayOrigin Vector3f) (rayDirection Vector3f))
   (let* ((edge1 (sub (getv tri 1) (getv tri 0)))
@@ -51,7 +51,7 @@
 	 (det   (dot edge1 pvec)))
     (if (and (> det (- EPSILON)) (< det EPSILON))
       (return-from intersects -1.0))
-    (let* ((inv_det (/ 1.0 det))
+    (let* ((inv_det (/ 1.0d0 det))
 	   (tvec    (sub rayOrigin (getv tri 0)))
 	   (u       (* (dot tvec pvec) inv_det)))
       (if (or (< u 0.0) (> u 1.0))
@@ -63,10 +63,10 @@
 	(* (dot edge2 qvec) inv_det))))) ; Returns hitDistance
 
 (defmethod samplePoint ((tri Triangle))
-  (let* ((sqr1 (sqrt (random 1.0)))
-	 (r2   (random 1.0))
-	 (a    (- 1.0 sqr1))
-	 (b    (* (- 1.0 r2) sqr1)))
+  (let* ((sqr1 (sqrt (random 1.0d0)))
+	 (r2   (random 1.0d0))
+	 (a    (- 1.0d0 sqr1))
+	 (b    (* (- 1.0d0 r2) sqr1)))
     (plus (mul (sub (getv tri 1) (getv tri 0)) a)
 	  (plus (mul (sub (getv tri 2) (getv tri 0)) b)
 		(getv tri 0)))))

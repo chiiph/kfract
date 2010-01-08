@@ -1,7 +1,7 @@
 (defclass Vector3f ()
   ((verts
      :initarg :verts
-     :initform #(0.0 0.0 0.0)
+     :initform #(0.0d0 0.0d0 0.0d0)
      :accessor verts)
    ))
 
@@ -50,7 +50,8 @@
 ;:::: CONSTRUCTOR    ::::;
 
 (defmethod make-vector3f (vec)
-  (make-instance 'Vector3f :verts (make-array 3 :initial-contents vec)))
+  (make-instance 'Vector3f :verts (make-array 3 :initial-contents 
+					      (mapcar #'(lambda(x) (float x 0.0d0)) vec))))
 
 ;:::: GET/SET FUNCS  ::::;
 
@@ -63,7 +64,7 @@
 ;:::: THE REST ::::;
 
 (defmethod dot ((vec1 Vector3f) (vec2 Vector3f))
-  (let ((sum 0.0))
+  (let ((sum 0.0d0))
     (dotimes (i 3)
       (incf sum (* (getv vec1 i) (getv vec2 i))))
     (return-from dot sum)))
@@ -72,7 +73,7 @@
   (let ((p1 (- (* (getv vec1 1) (getv vec2 2)) (* (getv vec1 2) (getv vec2 1))))
 	(p2 (- (* (getv vec1 2) (getv vec2 0)) (* (getv vec1 0) (getv vec2 2))))
 	(p3 (- (* (getv vec1 0) (getv vec2 1)) (* (getv vec1 1) (getv vec2 0)))))
-    (make-instance 'Vector3f :verts (make-array 3 :initial-contents (list p1 p2 p3)))))
+    (make-vector3f (list p1 p2 p3))))
 
 (defmethod sub ((vec1 Vector3f) (vec2 Vector3f))
   (let ((ar (make-array 3)))
@@ -106,7 +107,7 @@
 
 (defmethod unitize ((vec Vector3f))
   (let* ((l    (sqrt (+ (expt (getv vec 0) 2) (expt (getv vec 1) 2) (expt (getv vec 2) 2))))
-	 (oneL (if (zerop l) 0.0 (/ 1.0 l))))
+	 (oneL (if (zerop l) 0.0d0 (/ 1.0d0 l))))
     (make-instance 'Vector3f :verts (make-array 3 :initial-contents (list (* (getv vec 0) oneL) (* (getv vec 1) oneL) (* (getv vec 2) oneL))))))
 
 (defmethod isZero ((vec Vector3f))

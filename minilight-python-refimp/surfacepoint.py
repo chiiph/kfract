@@ -18,12 +18,18 @@ class SurfacePoint(object):
         ray = to_position - self.position
         distance2 = ray.dot(ray)
         cos_area = out_direction.dot(self.triangle_ref.normal) * self.triangle_ref.area
+#        out_direction.echovec()
+#        print "cos_area: "+str(cos_area)
         solid_angle = cos_area / max(distance2, 1e-6) if is_solid_angle else 1.0
         return self.triangle_ref.emitivity * solid_angle if cos_area > 0.0 else ZERO
 
     def get_reflection(self, in_direction, in_radiance, out_direction):
+	print "Doteando"
         in_dot = in_direction.dot(self.triangle_ref.normal)
+#        self.triangle_ref.tangent.echovec()
+	print in_dot
         out_dot = out_direction.dot(self.triangle_ref.normal)
+	print out_dot
         return ZERO if (in_dot < 0.0) ^ (out_dot < 0.0) else in_radiance * self.triangle_ref.reflectivity * (abs(in_dot) / pi)
 
     def get_next_direction(self, in_direction):
