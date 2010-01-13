@@ -43,7 +43,7 @@
 	 (tri        (triangle surf))
 	 (cosArea    (* (dot outDirection (normal tri)) (area tri)))
 	 (solidAngle (if isSolidAngle
-		       (/ cosArea (if (>= distance2 1e-6d0)
+		       (/ cosArea (if (>= distance2 1e-6)
 				    distance2
 				    1.0d0))
 		       1.0d0)))
@@ -86,4 +86,5 @@
 	     (outDirection (plus (mul tangent x)
 				 (plus (mul (cross normal tangent) y)
 				       (mul normal z)))))
-	(values outDirection color)))))
+	(values outDirection color))
+      (values (make-vector3f '(0.0 0.0 0.0)) (make-vector3f '(0.0 0.0 0.0))))))
