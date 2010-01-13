@@ -27,7 +27,7 @@
 ;            (:documentation "Sets val to the vertex i from vec"))
 
 ;:::: TODO: descifrar e implementar ::::;
-(defgeneric bound ()
+(defgeneric bound (bound)
 	    (:documentation "..."))
 
 (defgeneric intersects (poly rayOrigin rayDirectiion)

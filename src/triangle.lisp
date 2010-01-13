@@ -70,3 +70,6 @@
     (plus (mul (sub (getv tri 1) (getv tri 0)) a)
 	  (plus (mul (sub (getv tri 2) (getv tri 0)) b)
 		(getv tri 0)))))
+
+(defmethod bound ((bound list))
+  )
