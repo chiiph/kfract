@@ -19,7 +19,7 @@
 		     lastHit)
   (multiple-value-setq (pHitObject hitPosition)
     (scene-intersects rayOrigin rayDirection lastHit))
-  (if (not (= 0 pHitObject))
+  (if (not (numberp pHitObject))
     (let* ((surfp (make-surfacepoint pHitObject hitPosition))
 	   (rad (if (= 0 lastHit)
 		       (make-vector3f '(0.0 0.0 0.0))
@@ -40,9 +40,12 @@
 			   (surfp SurfacePoint))
   (multiple-value-setq (emitterPosition emitter) (emitter (scene rayt)))
   (if (not (numberp emitter)) ; Si es numero, entonces es 0, sino es un Triangle
-    (let* ((emitDirection (unitize (sub emitterPosition (pos surfp))))))
+    (let ((emitDirection (unitize (sub emitterPosition (pos surfp)))))
+      (multiple-value-bind (pHitObject hitPosition) 
+	(scene-intersect (pos surfp) emitDirection (triangle surfp))
+	(if (or (numberp pHitObject) ()))))
 
-;;;;;;;;;;;;;;;; CONTINUAR, LINEA 117, RAYTRACER.CPP
+;;;;;;;;;;;;;;;; CONTINUAR, LINEA 128, RAYTRACER.CPP
 
     (multiple-value-setq (pHitObject hitPosition)
       (scene-intersects rayOrigin rayDirection (triangle surfp)))
