@@ -1,8 +1,11 @@
-(load "vector3f.lisp")
+;;;; polygon.lisp
+;;; -*- Mode:Lisp; Syntax:ANSI-Common-Lisp; Coding:utf-8 -*-
+
+(in-package #:polygon)
 
 (defconstant tolerance (/ 1.0d0 1024.0d0))
 
-(defclass Polygon ()
+(defclass polygon ()
   ((reflectivity
      :initarg :ref
      :initform (make-vector3f '(0.0 0.0 0.0))

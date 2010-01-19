@@ -1,4 +1,7 @@
-(load "vector3f.lisp")
+;;;; image.lisp
+;;; -*- Mode:Lisp; Syntax:ANSI-Common-Lisp; Coding:utf-8 -*-
+
+(in-package #:image)
 
 (defconstant RGB_LUMINANCE (make-vector3f (list 0.2126 0.7152 0.0722)))
 (defconstant DISPLAY_LUMINANCE_MAX 200.0)
