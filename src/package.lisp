@@ -13,11 +13,15 @@
 	     #:plus
 	     #:mul
 	     #:sub
+	     #:getv
+	     #:div
+	     #:neg
 	     #:eq-vector3f))
 
 (defpackage #:polygon
     (:use #:cl
-	  #:vector3f))
+	  #:vector3f)
+    (:export #:polygon))
 
 (defpackage #:triangle
     (:use #:cl
@@ -42,6 +46,12 @@
 	   #:emission
 	   #:reflection
 	   #:nextDirection))
+
+(defpackage #:scene
+  (:use #:cl
+	#:vector3f
+	#:polygon
+	#:triangle))
 
 (defpackage #:image
   (:use #:cl

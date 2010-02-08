@@ -8,7 +8,13 @@
   :serial t ; Serial dependency
   :components ((:file "package")
                (:file "vector3f")
-               (:file "polygon" :depends-on ("vector3f"))
-	       (:file "triangle" :depends-on ("vector3f" "polygon"))
-	       (:file "image" :depends-on ("vector3f"))
-	       (:file "surfacepoint" :depends-on ("triangle"))))
+               (:file "polygon" 
+		      :depends-on ("vector3f"))
+	       (:file "triangle" 
+		      :depends-on ("vector3f" "polygon"))
+	       (:file "image" 
+		      :depends-on ("vector3f"))
+	       (:file "surfacepoint" 
+		      :depends-on ("triangle"))
+	       (:file "scene" 
+		      :depends-on ("triangle"))))
